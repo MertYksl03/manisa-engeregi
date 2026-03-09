@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manisa Engereği | The Playful Bytecode Language</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <header class="navbar">
+        <div class="logo">Manisa Engereği</div>
+        <nav>
+            <a href="index.html" class="active-nav">Home</a>
+            <a href="wiki.html">Wiki</a>
+            <a href="#code">Code</a>
+            <a href="#features">Features</a>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌞</button>
+            <a href="https://github.com/rft0/manisa-engeregi" class="btn btn-outline" target="_blank">GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <h1 class="headline">Simplicity and humor, powered by a <span>custom virtual machine.</span></h1>
+            <p class="about">Designed with both simplicity and humor in mind, Manisa Engereği is a dynamically typed programming language that brings a fresh, playful perspective to software development. Despite its light-hearted Turkish keywords, it is a fully functional system complete with its own bytecode compiler and stack-based virtual machine. By intentionally stripping away extraneous control structures, it encourages developers to focus strictly on pure logic and flow.</p>
+            <div class="hero-cta">
+                <a href="#code" class="btn btn-primary">See the Code</a>
+                <a href="https://github.com/rft0/manisa-engeregi" class="btn btn-secondary" target="_blank">View on GitHub</a>
+            </div>
+        </section>
+
+        <!-- Code at a Glance -->
+        <section class="code-section" id="code">
+            <div class="window">
+                <div class="window-header">
+                    <div class="dots"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="tabs">
+                        <button class="tab active" data-target="hello">hello.me</button>
+                        <button class="tab" data-target="factorial">faktöriyel.me</button>
+                        <button class="tab" data-target="file-io">oku.me</button>
+                        <button class="tab" data-target="input">girdi.me</button>
+                        <button class="tab" data-target="error">hatalı.me</button>
+                    </div>
+                </div>
+                <div class="window-body">
+<pre id="hello" class="code-block active">
+<span class="comment"># The minimalist way to say Hello</span>
+<span class="keyword">çıktı</span>(<span class="string">"Merhaba Dünya"</span>);
+</pre>
+<pre id="factorial" class="code-block">
+<span class="comment"># The recursive factorial, highlighting native syntax style</span>
+<span class="keyword">marifet</span> <span class="function">faktöriyel</span>(n) {
+    <span class="keyword">şayet</span> (n == <span class="number">0</span>) {
+        <span class="keyword">tebliğ</span> <span class="number">1</span>;
+    }
+    <span class="keyword">tebliğ</span> n * faktöriyel(n - <span class="number">1</span>);
+}
+
+<span class="keyword">değişken</span> sonuç = faktöriyel(<span class="number">5</span>);
+<span class="keyword">çıktı</span>(<span class="string">"Sonuç: "</span> + <span class="function">cümle</span>(sonuç));
+</pre>
+<pre id="file-io" class="code-block">
+<span class="comment"># Opens a file handle.</span>
+<span class="keyword">sabit</span> dosya_handle = <span class="function">aç</span>(<span class="string">"test.txt"</span>, <span class="string">"r"</span>);
+<span class="comment"># Read all bytes (-1)</span>
+<span class="keyword">sabit</span> içerik = <span class="function">oku</span>(dosya_handle, -<span class="number">1</span>);
+<span class="keyword">kapat</span>(dosya_handle);
+
+<span class="keyword">çıktı</span>(içerik);
+</pre>
+<pre id="input" class="code-block">
+<span class="keyword">sabit</span> hmm = <span class="function">girdi</span>(<span class="string">"Bir şeyler: "</span>);
+<span class="keyword">çıktı</span>(<span class="string">"Girdi: "</span> + hmm);
+</pre>
+<pre id="error" class="code-block">
+<span class="comment"># The parser doesn't halt on the first error, it recovers!</span>
+<span class="keyword">sabit</span> a = <span class="number">1</span>;
+<span class="keyword">sabit</span> b = <span class="number">2</span> <span class="comment"># Expected semicolon (Throws diagnostic instead of halting)</span>
+
+<span class="comment"># Recovers state and continues parsing</span>
+<span class="keyword">değişken</span> c = <span class="number">3</span>;
+
+<span class="keyword">şayet</span> (<span class="number">1</span> == <span class="number">1</span> { <span class="comment"># Expected ')' after condition</span>
+    c++;
+}
+</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Grid -->
+        <section class="features" id="features">
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">⚡</div>
+                    <h3>Custom VM</h3>
+                    <p>Compiles down to compact, linear bytecode. A custom stack-based Virtual Machine executes 1-byte opcodes flawlessly utilizing an Instruction Pointer, operand decoding, and a robust constant pool.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📦</div>
+                    <h3>Unified Objects</h3>
+                    <p>From constants to built-in functions, all elements operate as a polymorphic MEObject*. This unified foundation makes memory management predictable via a manual reference counting garbage collector.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🛡️</div>
+                    <h3>Resilient Compiler</h3>
+                    <p>Frustrated by compilers that panic on the first mistake? Our Lexer and Parser recover gracefully from unexpected tokens, analyzing the entire file to provide a comprehensive diagnostic report.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">✨</div>
+                    <h3>Ruthless Minimalism</h3>
+                    <p>Omitting syntactical clutter like for loops and switch statements enforces a highly consistent, uniform programming style. With just şayet (if) and madem (while), the language is delightfully small.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section class="getting-started" id="getting-started" style="padding: 4rem 2rem; background: var(--bg-dark);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2>Getting Started</h2>
+            </div>
+            <div class="window" style="max-width: 600px; margin: 0 auto;">
+                <div class="window-header">
+                    <div class="dots"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+                    <div class="tabs">
+                        <button class="tab active" data-target="linux-build">Linux & Mac</button>
+                        <button class="tab" data-target="windows-build">Windows</button>
+                    </div>
+                </div>
+                <div class="window-body">
+<pre id="linux-build" class="code-block active">
+<span class="comment"># Clone the repository</span>
+$ <span class="keyword">git</span> clone <span class="string">https://github.com/rft0/manisa-engeregi</span>
+
+<span class="comment"># Build and run the executable</span>
+$ <span class="keyword">make</span> && <span class="function">./bin/me</span> deneme.me
+</pre>
+<pre id="windows-build" class="code-block">
+<span class="comment"># Clone the repository</span>
+$ <span class="keyword">git</span> clone <span class="string">https://github.com/rft0/manisa-engeregi</span>
+
+<span class="comment"># Build using CMake</span>
+$ <span class="keyword">mkdir</span> -p build && <span class="keyword">cd</span> build
+$ <span class="keyword">cmake</span> .. && <span class="keyword">cmake</span> --build .
+
+<span class="comment"># Run the executable</span>
+$ <span class="function">.\bin\me.exe</span> deneme.me
+</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Language Details Section -->
+        <section class="details" id="details">
+            <div class="details-container">
+                <h2>Language Details</h2>
+                <div class="detail-row">
+                    <div class="detail-text">
+                        <h3>Dynamic Typing & Unified Objects</h3>
+                        <p>Manisa Engereği uses dynamic typing (<code>değişken</code> for variables, <code>sabit</code> for constants). You never need to declare types explicitly. Furthermore, everything in the language is an object extending the <code>MEObject*</code> base struct—meaning numbers, strings, and even built-in functions share the same polymorphic traits.</p>
+                    </div>
+                    <div class="detail-code">
+                        <pre><code><span class="keyword">sabit</span> pi = <span class="number">3.14</span>;
+<span class="keyword">değişken</span> isim = <span class="string">"Engerek"</span>;
+<span class="comment"># Both are treated as MEObjects internally</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="detail-row reverse">
+                    <div class="detail-text">
+                        <h3>Expressive Turkish Syntax</h3>
+                        <p>The standard library and keywords are fully localized. Instead of common keywords, you use constructs like <code>şayet</code> (if), <code>değilse</code> (else), <code>madem</code> (while), <code>ve</code> (and), and <code>yahut</code> (or). Want to define a new function? Just show off your <code>marifet</code> (skill/method)!</p>
+                    </div>
+                    <div class="detail-code">
+                        <pre><code><span class="keyword">şayet</span> (x > <span class="number">9</span> <span class="keyword">ve</span> x < <span class="number">100</span>) {
+    <span class="keyword">çıktı</span>(<span class="string">"Sayı iki basamaklı"</span>);
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-text">
+                        <h3>Resilient Frontend & Type Casting</h3>
+                        <p>The lexer and parser are designed to recover gracefully rather than failing aggressively on syntax errors. Plus, type casting is incredibly natural: use <code>ondalık("3")</code> to cast to a float or <code>cümle(3.14)</code> to cast to a string automatically.</p>
+                    </div>
+                    <div class="detail-code">
+                        <pre><code><span class="keyword">çıktı</span>(<span class="function">cümle</span>(<span class="number">3.14</span>) + <span class="string">"hmm"</span>); <span class="comment"># Prints "3.14hmm"</span></code></pre>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 4rem;">
+                    <p style="margin-bottom: 1rem; color: var(--text-muted);">For more info and in-depth technical documentation,</p>
+                    <a href="wiki.html" class="btn btn-outline">Visit the Technical Wiki ➔</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built for simplicity. Designed with humor. <br> Powered by an incredible custom Virtual Machine.</p>
+        <div class="links">
+            <a href="https://github.com/rft0/manisa-engeregi" target="_blank">GitHub Repository</a>
+        </div>
+    </footer>
+    <script src="main.js"></script>
+</body>
+</html>

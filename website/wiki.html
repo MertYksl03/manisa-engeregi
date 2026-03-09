@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manisa Engereği | Technical Wiki</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="wiki-body">
+    <div class="glow-bg"></div>
+    <header class="navbar">
+        <div class="logo"><a href="index.html"
+                style="text-decoration: none; color: inherit; background: inherit; -webkit-background-clip: inherit; -webkit-text-fill-color: inherit;">Manisa
+                Engereği</a></div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="wiki.html" class="active-nav">Wiki</a>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌞</button>
+            <a href="https://github.com/rft0/manisa-engeregi" class="btn btn-outline" target="_blank">GitHub</a>
+        </nav>
+    </header>
+
+    <div class="wiki-layout">
+        <aside class="wiki-sidebar">
+            <nav class="toc">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li><a href="#overview">Language Overview</a></li>
+                    <li><a href="#grammar">Grammar & Syntax</a>
+                        <ul>
+                            <li><a href="#bnf">BNF</a></li>
+                            <li><a href="#keywords">Keywords Table</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#control-structures">Control Structures</a></li>
+                    <li><a href="#vm">Virtual Machine Architecture</a></li>
+                    <li><a href="#bytecode">Bytecode Specification</a></li>
+                    <li><a href="#memory">Memory Management</a></li>
+                    <li><a href="#build-run">Building & Running</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="wiki-content">
+            <h1>Manisa Engereği Technical Wiki</h1>
+
+            <section id="overview">
+                <h2>1. Language Overview</h2>
+                <p>Manisa Engereği is a general-purpose, high-level programming language designed with two goals in
+                    mind: simplicity and humor. It is a dynamically typed language, meaning that variable types are not
+                    explicitly declared by the programmer. Instead, all variables are defined using the keywords
+                    <code>değişken</code> (variable) or <code>sabit</code> (constant).</p>
+                <p>All types—even built-in functions—are derived from a unified polymorphic object model. Certain
+                    commonly used control structures such as <code>for</code> loops and <code>switch</code> statements
+                    have been deliberately omitted to reinforce a uniform style of decision-making, keeping the language
+                    surface exceptionally minimal.</p>
+            </section>
+
+            <section id="grammar">
+                <h2>2. Grammar and Syntax</h2>
+
+                <h3 id="bnf">2.1 Backus-Naur Form (BNF)</h3>
+                <p>The parser utilizes explicit block declarations with braces <code>{}</code> and semicolons
+                    <code>;</code> as statement terminators, akin to standard C or JavaScript constructs.</p>
+                <pre class="wiki-code"><code>&lt;program&gt; ::= &lt;stmt&gt;*
+&lt;stmt&gt; ::= &lt;if_stmt&gt;
+| &lt;while_stmt&gt;
+| &lt;block&gt;
+| &lt;method_decl&gt;
+| &lt;return_stmt&gt;
+| &lt;break_stmt&gt;
+| &lt;continue_stmt&gt;
+| &lt;expr_stmt&gt;
+&lt;expr_stmt&gt; ::= &lt;expr&gt; ";"
+&lt;if_stmt&gt; ::= "şayet" "(" &lt;expr&gt; ")" &lt;stmt&gt; ["değilse" &lt;stmt&gt;]
+&lt;while_stmt&gt; ::= "madem" "(" &lt;expr&gt; ")" &lt;stmt&gt;
+&lt;block&gt; ::= "{" &lt;stmt&gt;* "}"
+&lt;method_decl&gt; ::= "marifet" IDENTIFIER "(" [&lt;parameters&gt;] ")" &lt;block&gt;
+&lt;parameters&gt; ::= IDENTIFIER ("," IDENTIFIER)*
+&lt;return_stmt&gt; ::= "tebliğ" [&lt;expr&gt;] ";"
+&lt;break_stmt&gt; ::= "yeter" ";"
+&lt;continue_stmt&gt; ::= "devam" ";"
+
+# Expressions
+&lt;expr&gt; ::= &lt;assignment&gt;
+&lt;assignment&gt; ::= &lt;logical_or&gt; ( ("=" | "+=" | "-=" | "*=" | "/=" | "%=" | "&=" | "|=" | "^=" | "~=") &lt;assignment&gt; )?
+&lt;logical_or&gt; ::= &lt;logical_and&gt; (&lt;logical_or_operator&gt; &lt;logical_and&gt;)*
+&lt;logical_or_operator&gt; ::= "||" | "yahut"
+&lt;logical_and&gt; ::= &lt;equality&gt; (&lt;logical_and_operator&gt; &lt;equality&gt;)*
+&lt;logical_and_operator&gt; ::= "&&" | "ve"
+&lt;equality&gt; ::= &lt;comparison&gt; (("==" | "!=") &lt;comparison&gt;)*
+&lt;comparison&gt; ::= &lt;bitwise_or&gt; (("&lt;" | "&lt;=" | "&gt;" | "&gt;=") &lt;bitwise_or&gt;)*
+&lt;bitwise_or&gt; ::= &lt;bitwise_xor&gt; ("|" &lt;bitwise_xor&gt;)*
+&lt;bitwise_xor&gt; ::= &lt;bitwise_and&gt; ("^" &lt;bitwise_and&gt;)*
+&lt;bitwise_and&gt; ::= &lt;shift&gt; ("&" &lt;shift&gt;)*
+&lt;shift&gt; ::= &lt;term&gt; (("&lt;&lt;" | "&gt;&gt;") &lt;term&gt;)*
+&lt;term&gt; ::= &lt;factor&gt; (("+" | "-") &lt;factor&gt;)*
+&lt;factor&gt; ::= &lt;unary&gt; (("*" | "/" | "%") &lt;unary&gt;)
+&lt;unary&gt; ::= ("-" | "!" | "~" | "gayrı") &lt;unary&gt;
+| &lt;postfix&gt;
+&lt;postfix&gt; ::= &lt;primary&gt; ("++" | "--")?
+&lt;primary&gt; ::= IDENTIFIER
+| IDENTIFIER "(" [&lt;arguments&gt;] ")"
+| INTEGER
+| FLOAT
+| STRING
+| "(" &lt;expr&gt; ")"
+&lt;arguments&gt; ::= &lt;expr&gt; ("," &lt;expr&gt;)*
+
+# Terminals (Tokens)
+IDENTIFIER ::= [a-zA-Z_][a-zA-Z0-9_]*
+INTEGER ::= [0-9]+
+FLOAT ::= [0-9]+\.[0-9]+
+STRING ::= """ .* """
+NEWLINE ::= ";"
+COMMENT ::= # .* NEWLINE</code></pre>
+
+                <h3 id="keywords">2.2 Keywords Look-up Table</h3>
+                <p>Manisa Engereği intrinsically supports Turkish characters in identifiers and keywords. Here is how
+                    standard programming terms map to Manisa constants:</p>
+                <table class="wiki-table">
+                    <thead>
+                        <tr>
+                            <th>Other Languages</th>
+                            <th>Manisa Engereği</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>const</code></td>
+                            <td><code>sabit</code></td>
+                            <td>Constant declaration</td>
+                        </tr>
+                        <tr>
+                            <td><code>let / var</code></td>
+                            <td><code>değişken</code></td>
+                            <td>Variable declaration</td>
+                        </tr>
+                        <tr>
+                            <td><code>and</code> / <code>&&</code></td>
+                            <td><code>ve</code> / <code>&&</code></td>
+                            <td>Logical AND</td>
+                        </tr>
+                        <tr>
+                            <td><code>or</code> / <code>||</code></td>
+                            <td><code>yahut</code> / <code>||</code></td>
+                            <td>Logical OR</td>
+                        </tr>
+                        <tr>
+                            <td><code>if</code></td>
+                            <td><code>şayet</code></td>
+                            <td>If condition</td>
+                        </tr>
+                        <tr>
+                            <td><code>else</code></td>
+                            <td><code>değilse</code></td>
+                            <td>Else condition</td>
+                        </tr>
+                        <tr>
+                            <td><code>while</code></td>
+                            <td><code>madem</code></td>
+                            <td>While loop</td>
+                        </tr>
+                        <tr>
+                            <td><code>function</code></td>
+                            <td><code>marifet</code></td>
+                            <td>Function declaration</td>
+                        </tr>
+                        <tr>
+                            <td><code>return</code></td>
+                            <td><code>tebliğ</code></td>
+                            <td>Return statement</td>
+                        </tr>
+                        <tr>
+                            <td><code>break</code></td>
+                            <td><code>yeter</code></td>
+                            <td>Break out of loop</td>
+                        </tr>
+                        <tr>
+                            <td><code>continue</code></td>
+                            <td><code>devam</code></td>
+                            <td>Continue loop</td>
+                        </tr>
+                        <tr>
+                            <td><code>none</code></td>
+                            <td><code>yok</code></td>
+                            <td>Null/None value</td>
+                        </tr>
+                        <tr>
+                            <td><code>not</code> / <code>!</code></td>
+                            <td><code>gayrı</code> / <code>!</code></td>
+                            <td>Logical NOT</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="control-structures">
+                <h2>3. Control Structures</h2>
+                <p>Manisa Engereği supports only two control structures: the if statement and the while loop. These
+                    constructs are fundamental to nearly all programming languages, and they are sufficient for
+                    expressing most conditional logic and repetition patterns. In line with the language’s minimalist
+                    philosophy, we intentionally excluded other control structures such as for loops and switch cases,
+                    as discussed in the previous section.</p>
+
+                <p>The keywords used for control structures in Manisa Engereği reflect the language’s humorous and
+                    culturally specific character:</p>
+                <ul>
+                    <li><strong><code>şayet</code></strong> — used to introduce an if condition</li>
+                    <li><strong><code>değilse</code></strong> — used for the else clause<br><em>(Note:
+                            <code>değilse</code> and <code>şayet</code> can be used respectively to create an else if
+                            block.)</em></li>
+                    <li><strong><code>madem</code></strong> — used to begin a while loop</li>
+                </ul>
+
+                <p>These keywords are both functional and playful, aiming to bring a smile to Turkish-speaking
+                    programmers while remaining clear in their intent.</p>
+                <p><em>Note: Manisa engereği can parse and interpret complex expressions like assignments / compound
+                        assignments in conditions.</em></p>
+            </section>
+
+            <section id="vm">
+                <h2>4. Virtual Machine Architecture</h2>
+                <p>The Manisa Engereği virtual machine (VM) is a stack-based interpreter that executes compiled
+                    bytecode.</p>
+
+                <h3>4.1 Core Components</h3>
+                <p>The VM consists of several key components:</p>
+                <ul>
+                    <li><strong>Instruction Pointer (IP):</strong> Tracks the current bytecode instruction being
+                        executed</li>
+                    <li><strong>Stack Pointer (SP):</strong> Points to the top of the stack</li>
+                    <li><strong>Stack:</strong> Stores <code>MEObject*</code> pointers</li>
+                    <li><strong>Constant Pool:</strong> Contains all literal values used in the program</li>
+                    <li><strong>Global Variables:</strong> Stores all global variable references</li>
+                    <li><strong>Local Variables:</strong> Stores variables local to the current scope</li>
+                </ul>
+
+                <h3>4.2 Execution Model</h3>
+                <p>The VM follows a simple execution cycle:</p>
+                <ol>
+                    <li>Fetch the next bytecode operation</li>
+                    <li>Decode the operation</li>
+                    <li>Execute the operation</li>
+                    <li>Repeat until program completion or error</li>
+                </ol>
+                <p>This cycle continues until either:</p>
+                <ul>
+                    <li>All bytecode instructions have been executed</li>
+                    <li>A <code>tebliğ</code> (return) instruction is encountered</li>
+                    <li>An error condition occurs</li>
+                </ul>
+            </section>
+
+            <section id="bytecode">
+                <h2>5. Bytecode Specification</h2>
+                <p>Instruction formats consist of a strict 1-byte opcode mapped typically alongside static operand
+                    bytes. Current opcodes natively recognized include:</p>
+                <div style="overflow-x:auto;">
+                    <table class="wiki-table">
+                        <thead>
+                            <tr>
+                                <th>Opcode (Name)</th>
+                                <th>Description</th>
+                                <th>Operands</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>CO_OP_NOP</code></td>
+                                <td>No operation</td>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_POP</code></td>
+                                <td>Pop top value</td>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_LOAD_CONST</code></td>
+                                <td>Load constant</td>
+                                <td>2-byte, constant index</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_LOAD_GLOBAL</code></td>
+                                <td>Load global variable</td>
+                                <td>2-byte, global index</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_LOAD_VARIABLE</code></td>
+                                <td>Load local variable</td>
+                                <td>2-byte, local index</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_STORE_GLOBAL</code></td>
+                                <td>Store global value</td>
+                                <td>2-byte, global index</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_STORE_VARIABLE</code></td>
+                                <td>Store local value</td>
+                                <td>2-byte, local index</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_BINARY_OP</code></td>
+                                <td>Binary arithmetic/logical operation</td>
+                                <td>1-byte, operation type</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_UNARY_OP</code></td>
+                                <td>Unary operation</td>
+                                <td>1-byte, operation type</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_CALL_FUNCTION</code></td>
+                                <td>Call a function</td>
+                                <td>1-byte, argument count</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_RETURN</code></td>
+                                <td>Return from function</td>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_JUMP_IF_FALSE</code></td>
+                                <td>Conditional jump if false</td>
+                                <td>2-byte, jump offset</td>
+                            </tr>
+                            <tr>
+                                <td><code>CO_OP_JUMP_REL</code></td>
+                                <td>Unconditional relative jump</td>
+                                <td>2-byte, jump offset</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>5.2 Binary Operations</h3>
+                <p>The VM supports the following binary operations, encoded as 1-byte operand values:</p>
+                <ul>
+                    <li><code>BIN_ASSIGN</code> &mdash; Variable assignment</li>
+                    <li><code>BIN_ADD</code> &mdash; Addition</li>
+                    <li><code>BIN_SUB</code> &mdash; Subtraction</li>
+                    <li><code>BIN_MUL</code> &mdash; Multiplication</li>
+                    <li><code>BIN_DIV</code> &mdash; Division</li>
+                    <li><code>BIN_MOD</code> &mdash; Modulo</li>
+                    <li><code>BIN_EQ</code> &mdash; Equality</li>
+                    <li><code>BIN_NEQ</code> &mdash; Inequality</li>
+                    <li><code>BIN_LT</code> &mdash; Less than</li>
+                    <li><code>BIN_LTE</code> &mdash; Less or equal</li>
+                    <li><code>BIN_GT</code> &mdash; Greater than</li>
+                    <li><code>BIN_GTE</code> &mdash; Greater or equal</li>
+                    <li><code>BIN_BIT_AND</code> &mdash; Bitwise AND</li>
+                    <li><code>BIN_BIT_OR</code> &mdash; Bitwise OR</li>
+                    <li><code>BIN_BIT_XOR</code> &mdash; Bitwise XOR</li>
+                    <li><code>BIN_BIT_LSHIFT</code> &mdash; Left shift</li>
+                    <li><code>BIN_BIT_RSHIFT</code> &mdash; Right shift</li>
+                    <li><code>BIN_AND</code> &mdash; Logical AND</li>
+                    <li><code>BIN_OR</code> &mdash; Logical OR</li>
+                </ul>
+
+                <h3>5.3 Unary Operations</h3>
+                <p>The VM supports these unary operations:</p>
+                <ul>
+                    <li><code>UNARY_NEGATIVE</code> &mdash; Numeric negation (-)</li>
+                    <li><code>UNARY_POSITIVE</code> &mdash; Numeric positive (+)</li>
+                    <li><code>UNARY_LOGICAL_NOT</code> &mdash; Logical NOT (!, gayrı)</li>
+                    <li><code>UNARY_PRE_INC</code> &mdash; Pre-increment (++X)</li>
+                    <li><code>UNARY_PRE_DEC</code> &mdash; Pre-decrement (--X)</li>
+                    <li><code>UNARY_POST_INC</code> &mdash; Post-increment (X++)</li>
+                    <li><code>UNARY_POST_DEC</code> &mdash; Post-decrement (X--)</li>
+                </ul>
+                <p><em>Note: Those unary operators get expanded to binary operations with one at bytecode generation so
+                        they do not directly live in bytecode.</em></p>
+            </section>
+
+            <section id="memory">
+                <h2>6. Memory Management</h2>
+                <p>Manisa Engereği uses reference counting for garbage collecting. Every Manisa Engereği Object
+                    (<code>MEObject*</code>) has its own <code>ob_refcount</code> which is initialized to 1 at start.
+                    The VM decrements and increments this reference count using macros (<code>ME_DECREF</code>,
+                    <code>ME_INCREF</code>) wherever those objects are interacted with.</p>
+
+                <p>While reference counting is sufficient for most scenarios, it is problematic when objects have
+                    references to each other (cyclic references). A potential future solution is implementing a
+                    mark-and-sweep garbage collector alongside reference counting.</p>
+
+                <h3>6.1 MEObject</h3>
+                <p><code>MEObject</code> structures are generic and act as the backbone of the interpreter. They mimic
+                    polymorphism and inheritance in C, making internal functions very useful for potential future class
+                    implementations where operator overloading is handled by changing function pointers.</p>
+                <pre class="wiki-code"><code>typedef struct {
+    size_t ob_refcount;    // Reference count of object
+    METypeObject* ob_type; // Pointer to the type object
+} MEObject;</code></pre>
+
+                <p>Every built-in object extends this definition and links to its own type object. Type objects are
+                    created statically at compile time if there is no inheritance (<code>tp_base == NULL</code>).</p>
+
+                <pre class="wiki-code"><code>struct METypeObject {
+    const char* tp_name;
+    METypeObject* tp_base;
+    size_t tp_sizeof;
+    fn_destructor tp_dealloc;
+    fn_str tp_str;
+    fn_bool tp_bool;
+    fn_call tp_call;
+    // ... arithmetic and bitwise operation pointers (tp_nb_add, tp_nb_bit_and, etc.)
+    // ... unary and comparison function pointers (tp_unary_negative, tp_cmp, etc.)
+};</code></pre>
+
+                <h3>6.2 Stack Management</h3>
+                <p>The stack-based architecture follows these principles:</p>
+                <ul>
+                    <li><strong>Stack:</strong> Stack is a dynamic array.</li>
+                    <li><strong>Stack Pointer (SP):</strong> Points top of the stack.</li>
+                    <li><strong>Stack Operations:</strong>
+                        <ul>
+                            <li><strong>PUSH:</strong> Increments SP and stores a value</li>
+                            <li><strong>POP:</strong> Retrieves a value and decrements SP</li>
+                            <li><strong>TOP:</strong> Accesses the top value without removing it</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>6.3 Object Representation</h3>
+                <p>All values in Manisa Engereği are represented as <code>MEObject</code> structures.</p>
+            </section>
+
+            <section id="build-run">
+                <h2>7. Building & Running</h2>
+                <p>Instructions for building the Manisa Engereği compiler and running a program written in Manisa
+                    Engereği:</p>
+
+                <h3>For Linux and Mac Users</h3>
+                <pre class="wiki-code"><code>make &amp;&amp; ./bin/me deneme.me</code></pre>
+
+                <h3>For Windows Users</h3>
+                <pre class="wiki-code"><code>mkdir -p build
+cd build
+cmake ..
+cmake --build .
+.\bin\me.exe deneme.me</code></pre>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>Built for simplicity. Designed with humor. <br> Powered by an incredible custom Virtual Machine.</p>
+        <div class="links">
+            <a href="https://github.com/rft0/manisa-engeregi" target="_blank">GitHub Repository</a>
+        </div>
+    </footer>
+    <script src="main.js"></script>
+</body>
+
+</html>
