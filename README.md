@@ -21,3 +21,6 @@ Language currentlys supports some standard io features like printing to terminal
 
 ### Some Code Examples
 Just look at the last pages of report.
+
+### Notes
+Runtime is pretty much like cpython's (which is a pretty bad design decision for performance imo but gives flexibility).
